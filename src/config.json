@@ -1,0 +1,30 @@
+{
+    "31337": {
+        "exchange": {
+            "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+        }
+    },
+    "5": {
+        "explorerURL": "https://goerli.etherscan.io/address/"
+    },
+    "2504": {
+        "exchange": {
+            "address": "0xBBA13a375b2E9a4d79ed8A8f0FB2313A335B463c"
+        },
+        "bridge": {
+            "address": "0x60b58FFe58Ae43480824ef8D6A4B6909A11C47Cf"
+        }
+    },
+    "2500": {
+        "exchange": {
+            "address": "0x07AE64C06C5cF908591fE2D8deD443B54349bE7C"
+        },
+        "bridge": {
+            "address": "0xA0A5f488f880EdC029b4d2B3390412ca201Aa8D9"
+        },
+        "tokens": {
+            "wETH": "0xbeBd5249E30FEE933b9B6D8d26D8ab9dB28674D9",
+            "aUSDC": "0xa95D0fb695397209409c755646585903EE0230dd"
+        }
+    }
+}
