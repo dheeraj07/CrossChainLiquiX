@@ -83,7 +83,13 @@ export const loadAccount = async (provider, dispatch) => {
   return account;
 };
 
-export const loadTokens = async (addresses, provider, defaultProvider, defaultChainID, dispatch) => {
+export const loadTokens = async (
+  addresses,
+  provider,
+  defaultProvider,
+  defaultChainID,
+  dispatch
+) => {
   let token,
     symbolA,
     symbolB,
@@ -99,9 +105,15 @@ export const loadTokens = async (addresses, provider, defaultProvider, defaultCh
 
   dispatch({ type: "TOKEN_LOADED_2", token, symbolB });
 
+  console.log(
+    "config[defaultChainID].tokens[symbolA]:   ",
+    config[defaultChainID].tokens[symbolA]
+  );
+  console.log(
+    "config[defaultChainID].tokens[symbolB]:   ",
+    config[defaultChainID].tokens[symbolB]
+  );
 
-  console.log("config[defaultChainID].tokens.symbolA:  ", config[defaultChainID].tokens[symbolA])
-  console.log("config[defaultChainID].tokens.symbolB:   ", config[defaultChainID].tokens[symbolA])
   await loadDefaultTokens(
     config[defaultChainID].tokens[symbolA],
     config[defaultChainID].tokens[symbolB],
@@ -109,21 +121,24 @@ export const loadTokens = async (addresses, provider, defaultProvider, defaultCh
     dispatch
   );
 
-
   return ticker;
 };
 
-
-export const loadDefaultTokens = async (address1, address2, provider, dispatch) => {
+export const loadDefaultTokens = async (
+  address1,
+  address2,
+  provider,
+  dispatch
+) => {
   let token;
-
+  console.log("address1:  ", address1);
+  console.log("address2:  ", address2);
   token = new ethers.Contract(address1, TOKEN_ABI, provider);
   dispatch({ type: "DEFAULT_TOKEN_LOADED_1", token });
 
   token = new ethers.Contract(address2, TOKEN_ABI, provider);
   dispatch({ type: "DEFAULT_TOKEN_LOADED_2", token });
 };
-
 
 export const loadMarketTicker = async (marketTicker, dispatch) => {
   dispatch({ type: "MARKET_TICKER_LOADED", marketTicker });
@@ -137,8 +152,12 @@ export const loadExchange = async (address, provider, dispatch) => {
 };
 
 export const loadDefaultExchange = async (address, provider, dispatch) => {
-  const defaultExchangeAddr = new ethers.Contract(address, EXCHANGE_ABI, provider);
-  dispatch({type: "DEFAULT_EXCHANGE_LOADED", defaultExchangeAddr})
+  const defaultExchangeAddr = new ethers.Contract(
+    address,
+    EXCHANGE_ABI,
+    provider
+  );
+  dispatch({ type: "DEFAULT_EXCHANGE_LOADED", defaultExchangeAddr });
 
   return defaultExchangeAddr;
 };
@@ -150,7 +169,17 @@ export const loadBridgeContract = async (address, provider, dispatch) => {
   return bridgeContract;
 };
 
-export const loadBalances = async (exchange, tokens, defaultTokenContracts, dispatch, account) => {
+export const loadBalances = async (
+  exchange,
+  tokens,
+  defaultTokenContracts,
+  dispatch,
+  account
+) => {
+  console.log("exchange:  ", exchange);
+  console.log("defaultTokenContracts:  ", defaultTokenContracts);
+  console.log("tokens:  ", tokens);
+
   let balances = ethers.utils.formatUnits(
     await tokens[0].balanceOf(account),
     18
@@ -212,7 +241,6 @@ export const transferTokens = async (
   }
 };
 
-
 export const crossChainDeposit = async (
   provider,
   bridge,
@@ -232,37 +260,61 @@ export const crossChainDeposit = async (
     const signer = await provider.getSigner();
     const amountToTransfer = ethers.utils.parseUnits(amount.toString(), 18);
 
-    console.log("config[defaultChainID].bridge.address:  ", config[defaultChainID].bridge.address);
-      console.log("userAddress:  ", userAddress);
-      console.log("symbol: ", symbol);
-      console.log("amount:  ", amount);
-      console.log("bridge:  ", bridge);
-      console.log("bridge addr:  ", bridge.address)
-
     if (transferType === "deposit") {
-      /*txn = await token
+      txn = await token
         .connect(signer)
         .approve(bridge.address, amountToTransfer);
-      await txn.wait();*/
-      console.log("initiating bridge 1st level");
+      await txn.wait();
+      /* console.log("initiating bridge 1st level");
       txn = await bridge
         .connect(signer)
         .approveAndTransfer(token.address,
                             amountToTransfer
                             );
+                           
+const batchAddress = "0x0000000000000000000000000000000000000808";
+
+
+
+  const abiBatch = [
+    "function batchAll(address[] calldata to, uint256[] calldata value, bytes[] calldata data, uint64[] calldata gasLimit) external"
+];
+
+const batch = new ethers.Contract(batchAddress, abiBatch, signer);
+
+  const approveData = token.interface.encodeFunctionData("approve", [
+    bridge.address,
+    amountToTransfer
+  ]);
+  const transferData = token.interface.encodeFunctionData("transfer", [
+    bridge.address,
+    amountToTransfer
+  ]);
+
+  const to = [token.address, token.address];
+  const value = [0, 0];
+  const data = [approveData, transferData];
+  const gasLimit = [];
+
+  const tx = await batch.batchAll(to, value, data, gasLimit, { from: signer });
+  await tx.wait();
+  console.log(tx);
+*/
+
       await txn.wait();
       console.log("initiating bridge 2nd level");
       txn = await bridge
         .connect(signer)
-        .depositCrossChain("Moonbeam", 
-                            config[defaultChainID].bridge.address, 
-                            userAddress, 
-                            symbol, 
-                            amountToTransfer,
-                            {value: ethers.utils.parseUnits('1', 'ether')}
-                            );
+        .depositCrossChain(
+          "Moonbeam",
+          config[defaultChainID].bridge.address,
+          userAddress,
+          symbol,
+          amountToTransfer,
+          { value: ethers.utils.parseUnits("1", "ether") }
+        );
       await txn.wait();
-      console.log(txn)
+      console.log(txn);
     }
   } catch (error) {
     console.log(error);
@@ -285,18 +337,19 @@ export const initiateLimitOrder = async (
 
   dispatch({ type: "NEW_LIMIT_ORDER" });
 
-  try {
-    const signer = await provider.getSigner();
-    const txn = await exchange
-      .connect(signer)
-      .limitOrder(orderAmount, orderPrice, orderType, marketName, false, signer._address);
-    await txn.wait();
-  } catch (error) {
-    console.log("LIMIT ORDER FAILED");
-    dispatch({ type: "LIMIT_ORDER_FAIL" });
-  }
+  const signer = await provider.getSigner();
+  const txn = await exchange
+    .connect(signer)
+    .limitOrder(
+      orderAmount,
+      orderPrice,
+      orderType,
+      marketName,
+      false,
+      "0x0000000000000000000000000000000000000000"
+    );
+  await txn.wait();
 };
-
 
 export const initiateCrossChainLimitOrder = async (
   provider,
@@ -313,22 +366,25 @@ export const initiateCrossChainLimitOrder = async (
   const orderType = order.orderType;
 
   dispatch({ type: "NEW_LIMIT_ORDER" });
-  console.log("bridge:   ", bridge.address)
+  console.log("bridge:   ", bridge.address);
 
-    const signer = await provider.getSigner();
-    const txn = await bridge.connect(signer)
-      .crossChainTrade("Moonbeam", 
-                        config[defaultChainID].bridge.address, 
-                        orderAmount, 
-                        orderPrice, 
-                        orderType, 
-                        marketName, 
-                        0, 
-                        account, {value: ethers.utils.parseUnits('1', 'ether')});
-    await txn.wait();
-    console.log(txn);
+  const signer = await provider.getSigner();
+  const txn = await bridge
+    .connect(signer)
+    .crossChainTrade(
+      "Moonbeam",
+      config[defaultChainID].bridge.address,
+      orderAmount,
+      orderPrice,
+      orderType,
+      marketName,
+      0,
+      account,
+      { value: ethers.utils.parseUnits("1", "ether") }
+    );
+  await txn.wait();
+  console.log(txn);
 };
-
 
 export const initiateCrossChainMarketOrder = async (
   provider,
@@ -344,26 +400,29 @@ export const initiateCrossChainMarketOrder = async (
   const orderPrice = ethers.utils.parseUnits(order.price, 18);
   const orderType = order.orderType;
 
-    const signer = await provider.getSigner();
-    const txn = await bridge.connect(signer)
-      .crossChainTrade("Moonbeam", 
-                        config[defaultChainID].bridge.address, 
-                        orderAmount, 
-                        orderPrice, 
-                        orderType, 
-                        marketName, 
-                        1, 
-                        account, {value: ethers.utils.parseUnits('1', 'ether')});
-    await txn.wait();
-    console.log(txn);
+  const signer = await provider.getSigner();
+  const txn = await bridge
+    .connect(signer)
+    .crossChainTrade(
+      "Moonbeam",
+      config[defaultChainID].bridge.address,
+      orderAmount,
+      orderPrice,
+      orderType,
+      marketName,
+      1,
+      account,
+      { value: ethers.utils.parseUnits("1", "ether") }
+    );
+  await txn.wait();
+  console.log(txn);
 };
 
-export const setDefaultChain = async (dispatch) => 
-{
+export const setDefaultChain = async (dispatch) => {
   const defaultChainID = 2500;
-  dispatch({type: "SET_DEFAULT_CHAIN", defaultChainID})
+  dispatch({ type: "SET_DEFAULT_CHAIN", defaultChainID });
   return defaultChainID;
-}
+};
 
 export const initiateMarketOrder = async (
   provider,
@@ -382,7 +441,14 @@ export const initiateMarketOrder = async (
     const signer = await provider.getSigner();
     const txn = await exchange
       .connect(signer)
-      .marketOrder(orderAmount, orderPrice, orderType, marketName);
+      .marketOrder(
+        orderAmount,
+        orderPrice,
+        orderType,
+        marketName,
+        false,
+        "0x0000000000000000000000000000000000000000"
+      );
     await txn.wait();
   } catch (error) {
     console.log(error);
@@ -418,7 +484,7 @@ async function getOrders(marketname, index, provider, exchange, account) {
     .connect(signer)
     .getOrderBookLength(index, marketname);
 
-    console.log("arrayLength:  ", arrayLength);
+  console.log("arrayLength:  ", arrayLength);
   let orders = [];
   for (let i = 0; i < arrayLength; i++) {
     const order = await exchange
@@ -436,8 +502,8 @@ export const loadAllOrders = async (
   dispatch,
   account
 ) => {
-  console.log("provider:  ",provider);
-  console.log("exchange:  ",exchange)
+  console.log("provider:  ", provider);
+  console.log("exchange:  ", exchange);
   let buyOrders = await getOrders(marketName, 0, provider, exchange, account);
   let sellOrders = await getOrders(marketName, 1, provider, exchange, account);
 
@@ -513,7 +579,6 @@ export const cancelOrder = async (
   account,
   marketTicker
 ) => {
-
   const signer = await provider.getSigner();
   const txn = await exchange
     .connect(signer)

@@ -3,7 +3,8 @@ import {
   initiateLimitOrder,
   reloadTradeDashBoard,
   initiateMarketOrder,
-  initiateCrossChainLimitOrder
+  initiateCrossChainLimitOrder,
+  initiateCrossChainMarketOrder,
 } from "../store/interactions";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -32,8 +33,7 @@ export const Order = () => {
       price,
       orderType: isBuy ? 0 : 1,
     };
-    if(defaultChainID === chainID)
-    {
+    if (defaultChainID === chainID) {
       if (currentOrderType === "LIMIT") {
         console.log("limit");
         await initiateLimitOrder(provider, exchange, symbols, order, dispatch);
@@ -41,9 +41,9 @@ export const Order = () => {
         console.log("market order");
         await initiateMarketOrder(provider, exchange, symbols, order, dispatch);
       }
-  
+
       e.target.reset();
-  
+
       if (marketTicker) {
         await reloadTradeDashBoard(
           marketTicker,
@@ -52,23 +52,31 @@ export const Order = () => {
           dispatch,
           account
         );
-      }
-      else {
+      } else {
         console.log("market order");
-        
       }
-    }
-    else{
+    } else {
       if (currentOrderType === "LIMIT") {
         console.log("limit");
-      await initiateCrossChainLimitOrder(
-        provider,
-        bridge,
-        symbols,
-        order,
-        dispatch,
-        defaultChainID,
-        account);
+        await initiateCrossChainLimitOrder(
+          provider,
+          bridge,
+          symbols,
+          order,
+          dispatch,
+          defaultChainID,
+          account
+        );
+      } else {
+        await initiateCrossChainMarketOrder(
+          provider,
+          bridge,
+          symbols,
+          order,
+          dispatch,
+          defaultChainID,
+          account
+        );
       }
     }
   };

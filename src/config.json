@@ -9,18 +9,18 @@
     },
     "2504": {
         "exchange": {
-            "address": "0xBBA13a375b2E9a4d79ed8A8f0FB2313A335B463c"
+            "address": "0x2e18eF9524d78c2Eb1b1B14066eAcF2D281e05B6"
         },
         "bridge": {
-            "address": "0x60b58FFe58Ae43480824ef8D6A4B6909A11C47Cf"
+            "address": "0x0843D78529668995FfD729eE854C9adb09AAe460"
         }
     },
     "2500": {
         "exchange": {
-            "address": "0x07AE64C06C5cF908591fE2D8deD443B54349bE7C"
+            "address": "0x3BB643868fd4d40B4FE33cA6c0be83C31F6A94bf"
         },
         "bridge": {
-            "address": "0xA0A5f488f880EdC029b4d2B3390412ca201Aa8D9"
+            "address": "0xF392144C93E72B0467ca5889aDFD90Fd4BE18B9d"
         },
         "tokens": {
             "wETH": "0xbeBd5249E30FEE933b9B6D8d26D8ab9dB28674D9",

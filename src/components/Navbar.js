@@ -30,7 +30,7 @@ export const Navbar = () => {
     <div className="exchange__header grid">
       <div className="exchange__header--brand flex">
         <img src={logo} className="logo" alt="logo"></img>
-        <h1>DEX</h1>
+        <h1>CrossChainLiquiX</h1>
       </div>
 
       <div className="exchange__header--networks flex">
@@ -42,13 +42,11 @@ export const Navbar = () => {
             value={config[chainID] ? `0x${chainID.toString(16)}` : "0"}
             onChange={networkHandler}
           >
-            <option value="0">
-              Select Network
-            </option>
+            <option value="0">Select Network</option>
             <option value="0x7A69">Localhost</option>
             <option value="0x5">Goerili</option>
-            <option value="0x9C8">Polygon-AXL</option>
-            <option value="0x9C4">Moonbeam-AXL</option>
+            <option value="0x9C8">Polygon - Axelar</option>
+            <option value="0x9C4">Moonbeam - Axelar</option>
           </select>
         )}
       </div>

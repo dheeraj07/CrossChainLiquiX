@@ -35,7 +35,7 @@ function depositCrossChain(
     ) external payable {
         address tokenAddress = gateway.tokenAddresses(symbol);
         /* Before executing this, tokens has to be approved to be used by the current contract, so run approve function in the front end */
-        //IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
+        IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
         IERC20(tokenAddress).approve(address(gateway), amount);
         bytes memory payload = abi.encode(messageSender, keccak256(abi.encodePacked("deposit")));
         if (msg.value > 0) {

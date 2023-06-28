@@ -7,12 +7,14 @@ import {
   loadAllTrades,
   loadUserOrders,
   loadUserTrades,
-  loadDefaultTokens
+  loadDefaultTokens,
 } from "../store/interactions";
 
 export const Markets = () => {
   const provider = useSelector((state) => state.provider.connection);
-  const defaultProvider = useSelector((state) => state.provider.defaultConnection);
+  const defaultProvider = useSelector(
+    (state) => state.provider.defaultConnection
+  );
   const defaultChainID = useSelector((state) => state.exchange.defaultChain);
   const chainID = useSelector((state) => state.provider.chainId);
   const exchange = useSelector((state) => state.exchange.contract);
@@ -20,7 +22,9 @@ export const Markets = () => {
   const account = useSelector((state) => state.provider.account);
   const sellOrders = useSelector((state) => state.exchange.sellOrders);
   const buyOrders = useSelector((state) => state.exchange.buyOrders);
-  const defaultExchange = useSelector((state) => state.exchange.defaultExchangeContract);
+  const defaultExchange = useSelector(
+    (state) => state.exchange.defaultExchangeContract
+  );
 
   const dispatch = useDispatch();
 
@@ -33,7 +37,13 @@ export const Markets = () => {
       dispatch
     );
     await loadMarketTicker(marketName, dispatch);
-    await loadAllOrders(marketName, defaultProvider, defaultExchange, dispatch, account);
+    await loadAllOrders(
+      marketName,
+      defaultProvider,
+      defaultExchange,
+      dispatch,
+      account
+    );
     await loadAllTrades(marketName, defaultExchange, dispatch);
 
     if (

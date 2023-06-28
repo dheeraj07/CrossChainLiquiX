@@ -11,7 +11,7 @@ import {
   setDefaultChain,
   loadBridgeContract,
   loadDefaultExchange,
-  loadDefaultProvider
+  loadDefaultProvider,
 } from "../store/interactions";
 import { Navbar } from "./Navbar";
 import { Markets } from "./Markets";
@@ -52,7 +52,7 @@ function App() {
       dispatch
     );
 
-    console.log("defaultExchange:   ", defaultExchange)
+    console.log("defaultExchange:   ", defaultExchange);
 
     const bridge = await loadBridgeContract(
       config[chainID].bridge.address,
@@ -90,8 +90,6 @@ function App() {
           <Trades />
         </section>
       </main>
-
-      {/* Alert */}
     </div>
   );
 }

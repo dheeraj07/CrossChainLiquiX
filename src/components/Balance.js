@@ -1,5 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { loadBalances, transferTokens, crossChainDeposit } from "../store/interactions";
+import {
+  loadBalances,
+  transferTokens,
+  crossChainDeposit,
+} from "../store/interactions";
 import { useEffect, useState, useRef } from "react";
 
 export const Balance = () => {
@@ -10,10 +14,14 @@ export const Balance = () => {
   const symbols = useSelector((state) => state.tokens.symbols);
   const provider = useSelector((state) => state.provider.connection);
   const exchange = useSelector((state) => state.exchange.contract);
-  const defaultExchange = useSelector((state) => state.exchange.defaultExchangeContract);
+  const defaultExchange = useSelector(
+    (state) => state.exchange.defaultExchangeContract
+  );
   const bridge = useSelector((state) => state.exchange.bridgeContract);
   const tokens = useSelector((state) => state.tokens.contracts);
-  const defaultTokenContracts = useSelector((state) => state.tokens.defaultContracts);
+  const defaultTokenContracts = useSelector(
+    (state) => state.tokens.defaultContracts
+  );
   const account = useSelector((state) => state.provider.account);
   const tokenBalances = useSelector((state) => state.tokens.balances);
   const exchangeBalances = useSelector((state) => state.exchange.balances);
@@ -31,16 +39,27 @@ export const Balance = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (defaultExchange && account && tokens) {
-        await loadBalances(defaultExchange, tokens, defaultTokenContracts, dispatch, account);
+        await loadBalances(
+          defaultExchange,
+          tokens,
+          defaultTokenContracts,
+          dispatch,
+          account
+        );
       }
     };
     fetchData();
-  }, [defaultExchange, tokens, defaultTokenContracts, account, transferInProgress]);
+  }, [
+    defaultExchange,
+    tokens,
+    defaultTokenContracts,
+    account,
+    transferInProgress,
+  ]);
 
   function depositHandler(e, token) {
     e.preventDefault();
-    if(defaultChainID === chainID)
-    {
+    if (defaultChainID === chainID) {
       if (token.address === tokens[0].address) {
         transferTokens(
           provider,
@@ -50,9 +69,7 @@ export const Balance = () => {
           token1TransferAmount,
           dispatch
         );
-      } 
-      else if (token.address === tokens[1].address)
-      {
+      } else if (token.address === tokens[1].address) {
         transferTokens(
           provider,
           exchange,
@@ -62,19 +79,33 @@ export const Balance = () => {
           dispatch
         );
       }
+    } else {
+      if (token.address === tokens[0].address) {
+        crossChainDeposit(
+          provider,
+          bridge,
+          "deposit",
+          token1TransferAmount,
+          dispatch,
+          defaultChainID,
+          account,
+          symbols[0],
+          token
+        );
+      } else if (token.address === tokens[1].address) {
+        crossChainDeposit(
+          provider,
+          bridge,
+          "deposit",
+          token2TransferAmount,
+          dispatch,
+          defaultChainID,
+          account,
+          symbols[1],
+          token
+        );
+      }
     }
-    else{
-      crossChainDeposit(provider,
-        bridge,
-        "deposit",
-        token1TransferAmount,
-        dispatch, 
-        defaultChainID,
-        account,
-        symbols[0],
-        token)
-    }
-    
   }
 
   function withdrawHandler(e, token) {
@@ -101,6 +132,7 @@ export const Balance = () => {
   }
 
   function activeTabHandler(e) {
+    console.log(exchangeBalances);
     if (e.target.className !== depositRef.current.className) {
       depositRef.current.className = "tab";
       setIsDeposit(false);
@@ -137,11 +169,17 @@ export const Balance = () => {
           </p>
           <p>
             <small>Wallet</small>
-            <br /> {tokenBalances && tokenBalances[0] && tokenBalances[0].substring(0, 10)}{" "}
+            <br />{" "}
+            {tokenBalances &&
+              tokenBalances[0] &&
+              tokenBalances[0].substring(0, 10)}{" "}
           </p>
           <p>
             <small>Exchange</small>
-            <br /> {exchangeBalances && exchangeBalances[0] && exchangeBalances[0].substring(0, 10)}{" "}
+            <br />{" "}
+            {exchangeBalances &&
+              exchangeBalances[0] &&
+              exchangeBalances[0].substring(0, 10)}{" "}
           </p>
         </div>
 
@@ -176,11 +214,17 @@ export const Balance = () => {
           </p>
           <p>
             <small>Wallet</small>
-            <br /> {tokenBalances && tokenBalances[1] && tokenBalances[1].substring(0, 10)}{" "}
+            <br />{" "}
+            {tokenBalances &&
+              tokenBalances[1] &&
+              tokenBalances[1].substring(0, 10)}{" "}
           </p>
           <p>
             <small>Exchange</small>
-            <br /> {exchangeBalances && exchangeBalances[1] && exchangeBalances[1].substring(0, 10)}{" "}
+            <br />{" "}
+            {exchangeBalances &&
+              exchangeBalances[1] &&
+              exchangeBalances[1].substring(0, 10)}{" "}
           </p>
         </div>
 

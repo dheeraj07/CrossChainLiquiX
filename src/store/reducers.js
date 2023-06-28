@@ -31,7 +31,13 @@ export const provider = (state = {}, action) => {
 };
 
 export const tokens = (
-  state = { loaded: false, contracts: [], symbols: [], balances: [], defaultContracts: [] },
+  state = {
+    loaded: false,
+    contracts: [],
+    symbols: [],
+    balances: [],
+    defaultContracts: [],
+  },
   action
 ) => {
   switch (action.type) {
@@ -57,12 +63,12 @@ export const tokens = (
     case "DEFAULT_TOKEN_LOADED_1":
       return {
         ...state,
-        defaultContracts: [action.token]
+        defaultContracts: [action.token],
       };
     case "DEFAULT_TOKEN_LOADED_2":
       return {
         ...state,
-        defaultcontracts: [...state.defaultContracts, action.token]
+        defaultContracts: [...state.defaultContracts, action.token],
       };
     case "TRADE_TOKEN_BALANCE_LOADED":
       return {
@@ -75,7 +81,22 @@ export const tokens = (
 };
 
 export const exchange = (
-  state = { loaded: false, contract: {}, bridgeContract: {}, defaultExchangeContract: {}, transaction: { isSuccessfu: false}, events: [], sellOrders:[], buyOrders: [], markets: [], market: "", allTrades: [], userOrders: [], userTrades: [], defaultChain: 0},
+  state = {
+    loaded: false,
+    contract: {},
+    bridgeContract: {},
+    defaultExchangeContract: {},
+    transaction: { isSuccessfu: false },
+    events: [],
+    sellOrders: [],
+    buyOrders: [],
+    markets: [],
+    market: "",
+    allTrades: [],
+    userOrders: [],
+    userTrades: [],
+    defaultChain: 0,
+  },
   action
 ) => {
   switch (action.type) {
@@ -84,62 +105,62 @@ export const exchange = (
         ...state,
         loaded: true,
         contract: action.exchangeAddr,
-      }
+      };
     case "DEFAULT_EXCHANGE_LOADED":
-    return {
-      ...state,
-      defaultExchangeContract: action.defaultExchangeAddr,
-    }
+      return {
+        ...state,
+        defaultExchangeContract: action.defaultExchangeAddr,
+      };
     case "BRIDGE_LOADED":
       return {
         ...state,
         bridgeContract: action.bridgeContract,
-      }
+      };
     case "SET_DEFAULT_CHAIN":
       return {
         ...state,
-        defaultChain: action.defaultChainID
-      }
+        defaultChain: action.defaultChainID,
+      };
     case "MARKET_TICKER_LOADED":
       return {
         ...state,
-        market: action.marketTicker
-      }
+        market: action.marketTicker,
+      };
     case "BUY_ORDERS_LOADED":
       return {
         ...state,
         buyOrders: action.buyOrders,
-      }
+      };
     case "SELL_ORDERS_LOADED":
       return {
         ...state,
         sellOrders: action.sellOrders,
-      }
+      };
     case "ALL_TRADES_LOADED":
       return {
         ...state,
         allTrades: action.allTrades,
-      }
+      };
     case "USER_ORDERS_LOADED":
       return {
         ...state,
         userOrders: action.userOrders,
-      }
+      };
     case "USER_TRADES_LOADED":
       return {
         ...state,
         userTrades: action.userTrades,
-      }
+      };
     case "TOKEN_PAIR_REGISTERED":
       return {
         ...state,
-        markets: action.registeredPairs
-      }
+        markets: action.registeredPairs,
+      };
     case "TOKEN_PAIR_LOADED":
       return {
         ...state,
-        markets: action.registeredPairs
-      }
+        markets: action.registeredPairs,
+      };
     case "PARENT_TOKEN_EXCHANGE_BALANCE_LOADED":
       return {
         ...state,
