@@ -26,6 +26,7 @@ CrossChain DEX is a decentralized exchange platform designed to provide a user-f
 ## Screenshots
 
 ![Screenshot 1](./scr-shot-1.png)
+
 ![Screenshot 2](./scr-shot-2.png)
 
 ## Presentation
