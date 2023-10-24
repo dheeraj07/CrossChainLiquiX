@@ -23,6 +23,11 @@ CrossChain DEX is a decentralized exchange platform designed to provide a user-f
 - Eliminates the need to use multiple exchanges
 - Reduces inefficiencies such as slippage, single chain dependency, and price discrepancies
 
+## Screenshots
+
+![Screenshot 1](./scr-shot-1.png)
+![Screenshot 2](./scr-shot-2.png)
+
 ## Presentation
 For a more detailed overview, please refer to this [presentation](https://www.canva.com/design/DAFyIXsY1e0/Bom5_Za7dhqwFoZv26saIA/view?utm_content=DAFyIXsY1e0&utm_campaign=designshare&utm_medium=link&utm_source=editor).
 
