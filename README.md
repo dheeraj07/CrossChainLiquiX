@@ -8,7 +8,7 @@ CrossChain DEX is a decentralized exchange platform designed to provide a user-f
 - No Need to Switch for Trading: Stay on a single chain and trade without the hassles of switching between different chains.
 - Automatic Bridging with Axelar: Assets are automatically transferred and made available on the default chain using the Axelar protocol.
 
-## Yet to be Worked On:
+## Future Updates:
 - Integration with Parachains: In the future, the exchange will not just interact with EVM chains but will also interface with all the parachains deployed on Polkadot. This aims to establish Moonbeam as the central hub for all cross-chain activity.
 - Unified Liquidity Aggregation: The ultimate goal is to aggregate the liquidity from all the EVM chains and all the parachains. This will make it possible to unify the entire liquidity pool and facilitate trading in one central location.
 - Current Status: As of now, integration is solid with EVM chains. However, the integration of parachains is still pending and will be part of the next phase of development.
